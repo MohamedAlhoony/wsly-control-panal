@@ -1,0 +1,9 @@
+#cards_container {
+  flex-wrap: nowrap !important;
+  margin-bottom: 1rem;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+.card {
+  width: 10rem !important;
+}

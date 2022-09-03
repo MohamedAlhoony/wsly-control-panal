@@ -1,0 +1,26 @@
+name: PiStoreCS-UI-Dev-Workflow
+on: [push]
+env:
+  AZURE_WEBAPP_NAME: testevocsui
+  AZURE_WEBAPP_PACKAGE_PATH: "./build"
+  NODE_VERSION: "10.x"
+jobs:
+  build-job:
+    name: Build job
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: npm install build test
+        run: |
+          npm ci
+          CI=false npm run build
+      - name: "Run Azure webapp deploy action using publish profile credentials"
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"

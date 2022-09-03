@@ -1,0 +1,6 @@
+.activeLink {
+  border-right-color: teal !important;
+}
+.link {
+  border-right: 0.2em transparent solid;
+}

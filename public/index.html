@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Control system for Pi Store" />
+    <title>Pi Store CS</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.rtlcss.com/semantic-ui/2.4.1/semantic.rtl.min.css"
+      integrity="sha384-yXUIpeQfH3cuk6u6Mwu8uyJXB2R3UOLvcha1343UCMA2TA7lQ14BFmrudI6LAP8A"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body dir="rtl">
+    <div id="root"></div>
+  </body>
+  <style>
+    .pageContainer > .ui.loading.segment:after {
+      position: fixed;
+    }
+    @media (min-width: 900px) {
+      .pageContainer > .ui.loading.segment:after {
+        right: calc(50% + 110px);
+      }
+      .ui.visible.left.sidebar ~ .pusher {
+        transform: none;
+        margin-right: 260px;
+      }
+      .ui.sidebar.visible ~ .pusher {
+        width: calc(100% - 260px);
+      }
+    }
+    @media (min-width: 767px) {
+      .ui.container {
+        margin: 0 auto !important;
+        padding: 0 1rem;
+      }
+    }
+    .ui.action.input {
+      flex-direction: row-reverse;
+    }
+    table th,
+    table td {
+      text-align: center !important;
+    }
+    html,
+    #root {
+      background-color: #f7f7f7;
+      height: 100vh;
+    }
+    html,
+    body,
+    button,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: Cairo !important;
+    }
+  </style>
+</html>
