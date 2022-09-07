@@ -13,7 +13,7 @@ const TopMenu = (props) => {
           placeholder="فلترة..."
         />
       </Menu.Item>
-      <Menu.Item position={"right"}>
+      {/* <Menu.Item position={"right"}>
         <Button
           inverted={props.isDarkMode}
           as={Link}
@@ -22,7 +22,7 @@ const TopMenu = (props) => {
           className="primary"
           icon={<Icon name={"plus"} />}
         />
-      </Menu.Item>
+      </Menu.Item> */}
     </Menu>
   );
 };

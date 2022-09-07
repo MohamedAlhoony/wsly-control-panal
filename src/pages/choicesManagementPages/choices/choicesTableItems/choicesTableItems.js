@@ -5,25 +5,27 @@ import { dateFormat } from "../../../../config";
 import { Link } from "react-router-dom";
 const CustomersTable = (props) => {
   const getTableItems = (props) => {
-    if (!props.categories.length) {
+    if (!props.choices.length) {
       return (
         <Table.Row>
           <Table.Cell colSpan={4}>لا يوجد نتائج</Table.Cell>
         </Table.Row>
       );
     }
-    return props.categories.map((category, key) => {
+    return props.choices.map((choice, key) => {
       return (
         <Table.Row key={key}>
-          <Table.Cell>{category.CategoryID}</Table.Cell>
-          <Table.Cell>{category.CategoryName}</Table.Cell>
+          <Table.Cell>{choice.ChoicID}</Table.Cell>
+          <Table.Cell>{choice.Name}</Table.Cell>
           <Table.Cell>
-            <Link
-              to={`/stores/${props.storeId}/categories/${category.CategoryID}/preferences`}
-            >
-              عرض التفضيلات ({category.PreferenceList.length})
-            </Link>
+            <strong>{choice.Price}</strong>
+            &nbsp;دينار ليبي
           </Table.Cell>
+          {/* <Table.Cell>
+            <Link to={`/stores/${props.storeId}/choices/${choice.CategoryID}`}>
+              خيارات التفضيل ({choice.ChoicList.length})
+            </Link>
+          </Table.Cell> */}
           <Table.Cell width={"1"}>
             <Dropdown icon={<Icon name={"ellipsis horizontal"} fitted />}>
               <Dropdown.Menu direction={"left"}>
@@ -31,11 +33,11 @@ const CustomersTable = (props) => {
                   text={"تعديل"}
                   icon={"edit"}
                   as={Link}
-                  to={`/categorys/${category.id}/update`}
+                  to={`/choices/${choice.id}/update`}
                 />
                 <Dropdown.Divider />
                 <Dropdown.Item
-                  onClick={() => props.handleDeleteCustomer(category)}
+                  onClick={() => props.handleDeleteCustomer(choice)}
                   text={"حذف"}
                   icon={"trash"}
                 />

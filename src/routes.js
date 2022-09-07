@@ -3,7 +3,11 @@ import { Route, Switch } from "react-router-dom";
 import ProtectedRoute from "./protectedRoute";
 import LoginPage from "./pages/login/login_page";
 
-import CustomersPage from "./pages/customersManagementPages/customers/customers_page";
+import StoresPage from "./pages/storesManagementPages/stores_page";
+import CategoriesPage from "./pages/categoriesManagementPages/categories/categories_page";
+
+import Prefs_page from "./pages/prefsManagementPages/prefs/prefs_page";
+import choices_page from "./pages/choicesManagementPages/choices/choices_page";
 // import RegisterCustomerPage from "./pages/customersManagementPages/registerCustomer/registerCustomer_page";
 // import UpdateCustomerPage from "./pages/customersManagementPages/updateCustomer/updateCustomer_page";
 // import CustomerDetailsPage from "./pages/customersManagementPages/customerDetails/customerDetails_page";
@@ -75,7 +79,22 @@ const Router = () => {
   return (
     <Switch>
       <Route path={"/login"} component={LoginPage} />
-      <ProtectedRoute exact path="/" component={CustomersPage} />
+      <ProtectedRoute noLayout exact path="/" component={StoresPage} />
+      <ProtectedRoute
+        exact
+        path="/stores/:storeId/categories"
+        component={CategoriesPage}
+      />
+      <ProtectedRoute
+        exact
+        path="/stores/:storeId/categories/:categoryId/preferences"
+        component={Prefs_page}
+      />
+      <ProtectedRoute
+        exact
+        path="/stores/:storeId/categories/:categoryId/preferences/:preferenceId/choices"
+        component={choices_page}
+      />
 
       {/* <ProtectedRoute
         exact

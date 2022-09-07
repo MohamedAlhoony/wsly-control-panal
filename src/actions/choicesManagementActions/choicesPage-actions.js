@@ -1,20 +1,28 @@
 import auth from "../../auth";
 import { baseURI } from "../../config";
 import * as layoutActions from "../layout-actions";
+import { fetchCategories } from "../categoriesManagementActions/categoriesPage-actions";
 
-export const fetchInitialData = ({ storeId }) => {
+export const fetchInitialData = ({ storeId, categoryId, preferenceId }) => {
   return async (dispatch) => {
     try {
       dispatch(isLoading(true));
       const categories = await fetchCategories({ storeId });
-      if (categories.length) {
+      const category = categories.find(
+        (category) => category.CategoryID === Number.parseInt(categoryId)
+      );
+      console.log(category);
+      const pref = category.PreferenceList.find(
+        (pref) => pref.PreferenceID === Number.parseInt(preferenceId)
+      );
+      if (pref.ChoicList?.length) {
         dispatch({
-          type: "categoriesPage-categories",
-          data: categories,
+          type: "choicesPage-choices",
+          data: pref.ChoicList,
         });
         dispatch({
-          type: "categoriesPage-filteredCategories",
-          data: categories,
+          type: "choicesPage-filteredChoices",
+          data: pref.ChoicList,
         });
       }
       dispatch(isLoading(false));
@@ -29,54 +37,27 @@ export const fetchInitialData = ({ storeId }) => {
     }
   };
 };
-export const fetchCategories = ({ storeId }) => {
-  return new Promise(async (resolve, reject) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", `Bearer ${auth.userData.access_token}`);
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-    try {
-      var response = await fetch(
-        `${baseURI}/store/Categories?StoreID=${storeId}`,
-        requestOptions
-      );
-      const body = JSON.parse(await response.text());
-      if (response.status === 200) {
-        resolve(body);
-      } else {
-        reject({ code: body?.errorCode, message: body?.message });
-      }
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
 
 export const updateFilteredResult = () => {
   return (dispatch, getState) => {
-    const categories = getState().categoriesPage_reducer.categories;
-    const search = getState()
-      .categoriesPage_reducer.search.toLowerCase()
-      .trim();
-    const filteredCategories = categories.filter(
+    const choices = getState().choicesPage_reducer.choices;
+    const search = getState().choicesPage_reducer.search.toLowerCase().trim();
+    const filteredChoices = choices.filter(
       (category) =>
-        category.CategoryName.toLowerCase().indexOf(search) !== -1 ||
-        category.CategoryID.toString().indexOf(search) !== -1
+        category.Name.toLowerCase().indexOf(search) !== -1 ||
+        category.ChoicID.toString().indexOf(search) !== -1 ||
+        category.Price.toString().indexOf(search) !== -1
     );
     dispatch({
-      type: "categoriesPage-filteredCategories",
-      data: filteredCategories,
+      type: "choicesPage-filteredChoices",
+      data: filteredChoices,
     });
   };
 };
 
 export const isLoading = (isLoading) => {
   return (dispatch) => {
-    dispatch({ type: "categoriesPage-isLoading", data: isLoading });
+    dispatch({ type: "choicesPage-isLoading", data: isLoading });
   };
 };
 
@@ -117,14 +98,14 @@ export const removeCustomer = (customerID) => {
           show: true,
         })
       );
-      const categories = await fetchCategories();
+      const choices = await fetchCategories();
       dispatch({
-        type: "categoriesPage-categories",
-        data: categories,
+        type: "choicesPage-choices",
+        data: choices,
       });
       dispatch({
-        type: "categoriesPage-filteredCategories",
-        data: categories,
+        type: "choicesPage-filteredChoices",
+        data: choices,
       });
 
       dispatch(isLoading(false));
@@ -134,52 +115,58 @@ export const removeCustomer = (customerID) => {
     }
   };
 };
-export const categoriesSortBy = (column) => {
+export const choicesSortBy = (column) => {
   return (dispatch, getState) => {
-    let categories =
-      getState().categoriesPage_reducer.filteredCategories.slice();
-    if (column === getState().categoriesPage_reducer.tableSorting.column) {
+    let choices = getState().choicesPage_reducer.filteredChoices.slice();
+    if (column === getState().choicesPage_reducer.tableSorting.column) {
       dispatch({
-        type: "categoriesPage-tableSorting",
+        type: "choicesPage-tableSorting",
         data: {
           column,
           direction:
-            getState().categoriesPage_reducer.tableSorting.direction ===
+            getState().choicesPage_reducer.tableSorting.direction ===
             "ascending"
               ? "descending"
               : "ascending",
         },
       });
       dispatch({
-        type: "categoriesPage-filteredCategories",
-        data: categories.reverse(),
+        type: "choicesPage-filteredChoices",
+        data: choices.reverse(),
       });
       return;
     }
     switch (column) {
-      case "CategoryName":
-        categories = categories.sort((a, b) => {
-          a = a.CategoryName;
-          b = b.CategoryName;
+      case "Name":
+        choices = choices.sort((a, b) => {
+          a = a.Name;
+          b = b.Name;
           return a < b ? -1 : a > b ? 1 : 0;
         });
         break;
-      case "CategoryID":
-        categories = categories.sort((a, b) => {
-          a = a.CategoryID;
-          b = b.CategoryID;
+      case "ChoicID":
+        choices = choices.sort((a, b) => {
+          a = a.ChoicID;
+          b = b.ChoicID;
+          return a < b ? -1 : a > b ? 1 : 0;
+        });
+        break;
+      case "Price":
+        choices = choices.sort((a, b) => {
+          a = a.Price;
+          b = b.Price;
           return a < b ? -1 : a > b ? 1 : 0;
         });
         break;
       default:
     }
     dispatch({
-      type: "categoriesPage-tableSorting",
+      type: "choicesPage-tableSorting",
       data: { column, direction: "ascending" },
     });
     dispatch({
-      type: "categoriesPage-filteredCategories",
-      data: categories,
+      type: "choicesPage-filteredChoices",
+      data: choices,
     });
   };
 };

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import * as actions from "../../../actions/categoriesManagementActions/categoriesPage-actions";
+import * as actions from "../../../actions/choicesManagementActions/choicesPage-actions";
 import { connect } from "react-redux";
 import PageContainer from "../../../components/pageContainer/pageContainer";
-import CategoriesTableItems from "./categoriesTableItems/categoriesTableItems";
+import ChoicesTableItems from "./choicesTableItems/choicesTableItems";
 import { Table } from "semantic-ui-react";
 import TopMenu from "./topMenu/topMenu";
 import debounce from "lodash.debounce";
@@ -13,18 +13,24 @@ let updateFilteredResult;
 const _updateFilteredResult = debounce((value) => {
   updateFilteredResult(value);
 }, 700);
-const Categories_Page = (props) => {
+const Choices_Page = (props) => {
   useEffect(() => {
-    props.dispatch(actions.fetchInitialData({ storeId: props.storeId }));
+    props.dispatch(
+      actions.fetchInitialData({
+        storeId: props.storeId,
+        categoryId: props.categoryId,
+        preferenceId: props.preferenceId,
+      })
+    );
     return () => {
-      props.dispatch({ type: "reset-categoriesPage_reducer" });
+      props.dispatch({ type: "reset-choicesPage_reducer" });
     };
   }, []);
   updateFilteredResult = (value) => {
     props.dispatch(actions.updateFilteredResult());
   };
-  const categoriesSortBy = (column) => {
-    props.dispatch(actions.categoriesSortBy(column));
+  const choicesSortBy = (column) => {
+    props.dispatch(actions.choicesSortBy(column));
   };
   let confirmedFunction;
   const confirmedHandleDeleteCustomer = (customer) => {
@@ -42,7 +48,7 @@ const Categories_Page = (props) => {
       <TopMenu
         isDarkMode={props.isDarkMode}
         handleSearchChange={(value) => {
-          props.dispatch({ type: "categoriesPage-search", data: value });
+          props.dispatch({ type: "choicesPage-search", data: value });
           _updateFilteredResult(value);
         }}
         search={props.search}
@@ -52,37 +58,48 @@ const Categories_Page = (props) => {
           <Table.Row>
             <Table.HeaderCell
               sorted={
-                props.tableSorting.column === "CategoryID"
+                props.tableSorting.column === "ChoicID"
                   ? props.tableSorting.direction
                   : null
               }
               onClick={() => {
-                categoriesSortBy("CategoryID");
+                choicesSortBy("ChoicID");
               }}
             >
               المعرف
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={
-                props.tableSorting.column === "CategoryName"
+                props.tableSorting.column === "Name"
                   ? props.tableSorting.direction
                   : null
               }
               onClick={() => {
-                categoriesSortBy("CategoryName");
+                choicesSortBy("Name");
               }}
             >
               الإسم
             </Table.HeaderCell>
 
-            <Table.HeaderCell></Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={
+                props.tableSorting.column === "Price"
+                  ? props.tableSorting.direction
+                  : null
+              }
+              onClick={() => {
+                choicesSortBy("Price");
+              }}
+            >
+              السعر
+            </Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          <CategoriesTableItems
+          <ChoicesTableItems
             handleDeleteCustomer={handleDeleteCustomer}
-            categories={props.filteredCategories}
+            choices={props.filteredChoices}
             storeId={props.storeId}
           />
         </Table.Body>
@@ -91,12 +108,14 @@ const Categories_Page = (props) => {
   );
 };
 
-export default connect(({ categoriesPage_reducer, layout_reducer }, props) => {
+export default connect(({ choicesPage_reducer, layout_reducer }, props) => {
   return {
-    isLoading: categoriesPage_reducer.isLoading,
-    filteredCategories: categoriesPage_reducer.filteredCategories,
-    tableSorting: categoriesPage_reducer.tableSorting,
-    search: categoriesPage_reducer.search,
+    isLoading: choicesPage_reducer.isLoading,
+    filteredChoices: choicesPage_reducer.filteredChoices,
+    tableSorting: choicesPage_reducer.tableSorting,
+    search: choicesPage_reducer.search,
     storeId: props.match.params.storeId,
+    categoryId: props.match.params.categoryId,
+    preferenceId: props.match.params.preferenceId,
   };
-})(Categories_Page);
+})(Choices_Page);

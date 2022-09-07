@@ -5,8 +5,8 @@ import SidebarItems from "./sideBarItems/sideBarItems";
 const MovingSideBar = (props) => {
   const items = [
     {
-      headerName: "الزبائن",
-      items: [{ name: "إدارة الزبائن", path: "/", icon: "users" }],
+      headerName: "المطاعم",
+      items: [{ name: "المطاعم", path: "/", icon: "marker" }],
     },
     // {
     //   headerName: "العملات",
@@ -156,9 +156,7 @@ const MovingSideBar = (props) => {
           </Menu.Header>
         ) : null}
         <Menu.Item>
-          <span style={{ fontSize: "1.2rem", fontWeight: "bolder" }}>
-            OMS Client
-          </span>
+          <span style={{ fontSize: "1.2rem", fontWeight: "bolder" }}>وصلي</span>
         </Menu.Item>
         <SidebarItems
           hideSideBar={() => {

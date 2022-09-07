@@ -1,18 +1,17 @@
 import auth from "../../auth";
 import { baseURI } from "../../config";
-import { normalizeFetchedData } from "../../helperFunctions";
 import * as layoutActions from "../layout-actions";
-export const fetchInitialData = (categoryID) => {
+export const fetchInitialData = (signal) => {
   return async (dispatch, getState) => {
     try {
       dispatch(isLoading(true));
-      const [categoryDetails] = await Promise.all([
-        fetchCategoryDetails(categoryID),
-      ]);
-      dispatch({
-        type: "categoryDetailsPage-categoryDetails",
-        data: normalizeFetchedData(categoryDetails),
-      });
+      const stores = await fetchStores();
+      if (stores.length) {
+        dispatch({
+          type: "storesPage-stores",
+          data: stores,
+        });
+      }
       dispatch(isLoading(false));
     } catch (error) {
       dispatch(
@@ -26,7 +25,7 @@ export const fetchInitialData = (categoryID) => {
   };
 };
 
-export const fetchCategoryDetails = (categoryID) => {
+export const fetchStores = () => {
   return new Promise(async (resolve, reject) => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -37,10 +36,7 @@ export const fetchCategoryDetails = (categoryID) => {
       redirect: "follow",
     };
     try {
-      var response = await fetch(
-        `${baseURI}/api/Category/${categoryID}`,
-        requestOptions
-      );
+      var response = await fetch(`${baseURI}/store/Stores`, requestOptions);
       const body = JSON.parse(await response.text());
       if (response.status === 200) {
         resolve(body);
@@ -55,6 +51,6 @@ export const fetchCategoryDetails = (categoryID) => {
 
 export const isLoading = (isLoading) => {
   return (dispatch) => {
-    dispatch({ type: "categoryDetailsPage-isLoading", data: isLoading });
+    dispatch({ type: "storesPage-isLoading", data: isLoading });
   };
 };

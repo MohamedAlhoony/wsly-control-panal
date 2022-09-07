@@ -56,7 +56,7 @@ const Login_Page = (props) => {
         <Grid.Row style={{ maxWidth: "500px" }}>
           <Grid.Column width={16}>
             <Header as={"h2"} textAlign={"center"}>
-              وصلي
+              تطبيق وصلي
             </Header>
             <Form
               loading={props.isLoading}

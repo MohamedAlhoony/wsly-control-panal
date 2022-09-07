@@ -1,7 +1,7 @@
 let defaultState = {
   isLoading: false,
-  categories: [],
-  filteredCategories: [],
+  choices: [],
+  filteredChoices: [],
   search: "",
   tableSorting: {
     column: null,
@@ -9,32 +9,32 @@ let defaultState = {
   },
 };
 
-const categoriesPage_reducer = (state = defaultState, action) => {
+const choicesPage_reducer = (state = defaultState, action) => {
   switch (action.type) {
-    case "categoriesPage-tableSorting":
+    case "choicesPage-tableSorting":
       return {
         ...state,
         tableSorting: action.data,
       };
-    case "categoriesPage-search":
+    case "choicesPage-search":
       return {
         ...state,
         search: action.data,
       };
-    case "categoriesPage-isLoading":
+    case "choicesPage-isLoading":
       return {
         ...state,
         isLoading: action.data,
       };
-    case "categoriesPage-categories":
+    case "choicesPage-choices":
       return {
         ...state,
-        categories: action.data,
+        choices: action.data,
       };
-    case "categoriesPage-filteredCategories":
+    case "choicesPage-filteredChoices":
       return {
         ...state,
-        filteredCategories: action.data,
+        filteredChoices: action.data,
       };
     default:
       return {
@@ -43,4 +43,4 @@ const categoriesPage_reducer = (state = defaultState, action) => {
   }
 };
 
-export default categoriesPage_reducer;
+export default choicesPage_reducer;

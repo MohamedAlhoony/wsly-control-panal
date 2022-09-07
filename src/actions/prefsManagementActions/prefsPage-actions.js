@@ -1,20 +1,24 @@
 import auth from "../../auth";
 import { baseURI } from "../../config";
 import * as layoutActions from "../layout-actions";
+import { fetchCategories } from "../categoriesManagementActions/categoriesPage-actions";
 
-export const fetchInitialData = ({ storeId }) => {
+export const fetchInitialData = ({ storeId, categoryId }) => {
   return async (dispatch) => {
     try {
       dispatch(isLoading(true));
       const categories = await fetchCategories({ storeId });
-      if (categories.length) {
+      const category = categories.find(
+        (category) => category.CategoryID === Number.parseInt(categoryId)
+      );
+      if (category.PreferenceList?.length) {
         dispatch({
-          type: "categoriesPage-categories",
-          data: categories,
+          type: "prefsPage-prefs",
+          data: category.PreferenceList,
         });
         dispatch({
-          type: "categoriesPage-filteredCategories",
-          data: categories,
+          type: "prefsPage-filteredPrefs",
+          data: category.PreferenceList,
         });
       }
       dispatch(isLoading(false));
@@ -29,54 +33,26 @@ export const fetchInitialData = ({ storeId }) => {
     }
   };
 };
-export const fetchCategories = ({ storeId }) => {
-  return new Promise(async (resolve, reject) => {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    myHeaders.append("Authorization", `Bearer ${auth.userData.access_token}`);
-    var requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-      redirect: "follow",
-    };
-    try {
-      var response = await fetch(
-        `${baseURI}/store/Categories?StoreID=${storeId}`,
-        requestOptions
-      );
-      const body = JSON.parse(await response.text());
-      if (response.status === 200) {
-        resolve(body);
-      } else {
-        reject({ code: body?.errorCode, message: body?.message });
-      }
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
 
 export const updateFilteredResult = () => {
   return (dispatch, getState) => {
-    const categories = getState().categoriesPage_reducer.categories;
-    const search = getState()
-      .categoriesPage_reducer.search.toLowerCase()
-      .trim();
-    const filteredCategories = categories.filter(
+    const prefs = getState().prefsPage_reducer.prefs;
+    const search = getState().prefsPage_reducer.search.toLowerCase().trim();
+    const filteredPrefs = prefs.filter(
       (category) =>
-        category.CategoryName.toLowerCase().indexOf(search) !== -1 ||
-        category.CategoryID.toString().indexOf(search) !== -1
+        category.Name.toLowerCase().indexOf(search) !== -1 ||
+        category.PreferenceID.toString().indexOf(search) !== -1
     );
     dispatch({
-      type: "categoriesPage-filteredCategories",
-      data: filteredCategories,
+      type: "prefsPage-filteredPrefs",
+      data: filteredPrefs,
     });
   };
 };
 
 export const isLoading = (isLoading) => {
   return (dispatch) => {
-    dispatch({ type: "categoriesPage-isLoading", data: isLoading });
+    dispatch({ type: "prefsPage-isLoading", data: isLoading });
   };
 };
 
@@ -117,14 +93,14 @@ export const removeCustomer = (customerID) => {
           show: true,
         })
       );
-      const categories = await fetchCategories();
+      const prefs = await fetchCategories();
       dispatch({
-        type: "categoriesPage-categories",
-        data: categories,
+        type: "prefsPage-prefs",
+        data: prefs,
       });
       dispatch({
-        type: "categoriesPage-filteredCategories",
-        data: categories,
+        type: "prefsPage-filteredPrefs",
+        data: prefs,
       });
 
       dispatch(isLoading(false));
@@ -134,52 +110,50 @@ export const removeCustomer = (customerID) => {
     }
   };
 };
-export const categoriesSortBy = (column) => {
+export const prefsSortBy = (column) => {
   return (dispatch, getState) => {
-    let categories =
-      getState().categoriesPage_reducer.filteredCategories.slice();
-    if (column === getState().categoriesPage_reducer.tableSorting.column) {
+    let prefs = getState().prefsPage_reducer.filteredPrefs.slice();
+    if (column === getState().prefsPage_reducer.tableSorting.column) {
       dispatch({
-        type: "categoriesPage-tableSorting",
+        type: "prefsPage-tableSorting",
         data: {
           column,
           direction:
-            getState().categoriesPage_reducer.tableSorting.direction ===
-            "ascending"
+            getState().prefsPage_reducer.tableSorting.direction === "ascending"
               ? "descending"
               : "ascending",
         },
       });
       dispatch({
-        type: "categoriesPage-filteredCategories",
-        data: categories.reverse(),
+        type: "prefsPage-filteredPrefs",
+        data: prefs.reverse(),
       });
       return;
     }
     switch (column) {
-      case "CategoryName":
-        categories = categories.sort((a, b) => {
-          a = a.CategoryName;
-          b = b.CategoryName;
+      case "Name":
+        prefs = prefs.sort((a, b) => {
+          a = a.Name;
+          b = b.Name;
           return a < b ? -1 : a > b ? 1 : 0;
         });
         break;
-      case "CategoryID":
-        categories = categories.sort((a, b) => {
-          a = a.CategoryID;
-          b = b.CategoryID;
+      case "PreferenceID":
+        prefs = prefs.sort((a, b) => {
+          a = a.PreferenceID;
+          b = b.PreferenceID;
           return a < b ? -1 : a > b ? 1 : 0;
         });
         break;
       default:
     }
     dispatch({
-      type: "categoriesPage-tableSorting",
+      type: "prefsPage-tableSorting",
       data: { column, direction: "ascending" },
     });
     dispatch({
-      type: "categoriesPage-filteredCategories",
-      data: categories,
+      type: "prefsPage-filteredPrefs",
+      data: prefs,
     });
   };
 };

@@ -5,23 +5,23 @@ import { dateFormat } from "../../../../config";
 import { Link } from "react-router-dom";
 const CustomersTable = (props) => {
   const getTableItems = (props) => {
-    if (!props.categories.length) {
+    if (!props.prefs.length) {
       return (
         <Table.Row>
           <Table.Cell colSpan={4}>لا يوجد نتائج</Table.Cell>
         </Table.Row>
       );
     }
-    return props.categories.map((category, key) => {
+    return props.prefs.map((pref, key) => {
       return (
         <Table.Row key={key}>
-          <Table.Cell>{category.CategoryID}</Table.Cell>
-          <Table.Cell>{category.CategoryName}</Table.Cell>
+          <Table.Cell>{pref.PreferenceID}</Table.Cell>
+          <Table.Cell>{pref.Name}</Table.Cell>
           <Table.Cell>
             <Link
-              to={`/stores/${props.storeId}/categories/${category.CategoryID}/preferences`}
+              to={`/stores/${props.storeId}/categories/${props.categoryId}/preferences/${pref.PreferenceID}/choices`}
             >
-              عرض التفضيلات ({category.PreferenceList.length})
+              خيارات التفضيل ({pref.ChoicList.length})
             </Link>
           </Table.Cell>
           <Table.Cell width={"1"}>
@@ -31,11 +31,11 @@ const CustomersTable = (props) => {
                   text={"تعديل"}
                   icon={"edit"}
                   as={Link}
-                  to={`/categorys/${category.id}/update`}
+                  to={`/prefs/${pref.id}/update`}
                 />
                 <Dropdown.Divider />
                 <Dropdown.Item
-                  onClick={() => props.handleDeleteCustomer(category)}
+                  onClick={() => props.handleDeleteCustomer(pref)}
                   text={"حذف"}
                   icon={"trash"}
                 />

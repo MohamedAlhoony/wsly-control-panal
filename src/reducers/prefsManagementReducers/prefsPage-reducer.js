@@ -1,7 +1,7 @@
 let defaultState = {
   isLoading: false,
-  categories: [],
-  filteredCategories: [],
+  prefs: [],
+  filteredPrefs: [],
   search: "",
   tableSorting: {
     column: null,
@@ -9,32 +9,32 @@ let defaultState = {
   },
 };
 
-const categoriesPage_reducer = (state = defaultState, action) => {
+const prefsPage_reducer = (state = defaultState, action) => {
   switch (action.type) {
-    case "categoriesPage-tableSorting":
+    case "prefsPage-tableSorting":
       return {
         ...state,
         tableSorting: action.data,
       };
-    case "categoriesPage-search":
+    case "prefsPage-search":
       return {
         ...state,
         search: action.data,
       };
-    case "categoriesPage-isLoading":
+    case "prefsPage-isLoading":
       return {
         ...state,
         isLoading: action.data,
       };
-    case "categoriesPage-categories":
+    case "prefsPage-prefs":
       return {
         ...state,
-        categories: action.data,
+        prefs: action.data,
       };
-    case "categoriesPage-filteredCategories":
+    case "prefsPage-filteredPrefs":
       return {
         ...state,
-        filteredCategories: action.data,
+        filteredPrefs: action.data,
       };
     default:
       return {
@@ -43,4 +43,4 @@ const categoriesPage_reducer = (state = defaultState, action) => {
   }
 };
 
-export default categoriesPage_reducer;
+export default prefsPage_reducer;

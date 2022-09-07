@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import * as actions from "../../../actions/categoriesManagementActions/categoriesPage-actions";
+import * as actions from "../../../actions/prefsManagementActions/prefsPage-actions";
 import { connect } from "react-redux";
 import PageContainer from "../../../components/pageContainer/pageContainer";
-import CategoriesTableItems from "./categoriesTableItems/categoriesTableItems";
+import PrefsTableItems from "./prefsTableItems/prefsTableItems";
 import { Table } from "semantic-ui-react";
 import TopMenu from "./topMenu/topMenu";
 import debounce from "lodash.debounce";
@@ -13,18 +13,23 @@ let updateFilteredResult;
 const _updateFilteredResult = debounce((value) => {
   updateFilteredResult(value);
 }, 700);
-const Categories_Page = (props) => {
+const Prefs_Page = (props) => {
   useEffect(() => {
-    props.dispatch(actions.fetchInitialData({ storeId: props.storeId }));
+    props.dispatch(
+      actions.fetchInitialData({
+        storeId: props.storeId,
+        categoryId: props.categoryId,
+      })
+    );
     return () => {
-      props.dispatch({ type: "reset-categoriesPage_reducer" });
+      props.dispatch({ type: "reset-prefsPage_reducer" });
     };
   }, []);
   updateFilteredResult = (value) => {
     props.dispatch(actions.updateFilteredResult());
   };
-  const categoriesSortBy = (column) => {
-    props.dispatch(actions.categoriesSortBy(column));
+  const prefsSortBy = (column) => {
+    props.dispatch(actions.prefsSortBy(column));
   };
   let confirmedFunction;
   const confirmedHandleDeleteCustomer = (customer) => {
@@ -42,7 +47,7 @@ const Categories_Page = (props) => {
       <TopMenu
         isDarkMode={props.isDarkMode}
         handleSearchChange={(value) => {
-          props.dispatch({ type: "categoriesPage-search", data: value });
+          props.dispatch({ type: "prefsPage-search", data: value });
           _updateFilteredResult(value);
         }}
         search={props.search}
@@ -52,24 +57,24 @@ const Categories_Page = (props) => {
           <Table.Row>
             <Table.HeaderCell
               sorted={
-                props.tableSorting.column === "CategoryID"
+                props.tableSorting.column === "PreferenceID"
                   ? props.tableSorting.direction
                   : null
               }
               onClick={() => {
-                categoriesSortBy("CategoryID");
+                prefsSortBy("PreferenceID");
               }}
             >
               المعرف
             </Table.HeaderCell>
             <Table.HeaderCell
               sorted={
-                props.tableSorting.column === "CategoryName"
+                props.tableSorting.column === "Name"
                   ? props.tableSorting.direction
                   : null
               }
               onClick={() => {
-                categoriesSortBy("CategoryName");
+                prefsSortBy("Name");
               }}
             >
               الإسم
@@ -80,10 +85,11 @@ const Categories_Page = (props) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          <CategoriesTableItems
+          <PrefsTableItems
             handleDeleteCustomer={handleDeleteCustomer}
-            categories={props.filteredCategories}
+            prefs={props.filteredPrefs}
             storeId={props.storeId}
+            categoryId={props.categoryId}
           />
         </Table.Body>
       </Table>
@@ -91,12 +97,13 @@ const Categories_Page = (props) => {
   );
 };
 
-export default connect(({ categoriesPage_reducer, layout_reducer }, props) => {
+export default connect(({ prefsPage_reducer, layout_reducer }, props) => {
   return {
-    isLoading: categoriesPage_reducer.isLoading,
-    filteredCategories: categoriesPage_reducer.filteredCategories,
-    tableSorting: categoriesPage_reducer.tableSorting,
-    search: categoriesPage_reducer.search,
+    isLoading: prefsPage_reducer.isLoading,
+    filteredPrefs: prefsPage_reducer.filteredPrefs,
+    tableSorting: prefsPage_reducer.tableSorting,
+    search: prefsPage_reducer.search,
     storeId: props.match.params.storeId,
+    categoryId: props.match.params.categoryId,
   };
-})(Categories_Page);
+})(Prefs_Page);
