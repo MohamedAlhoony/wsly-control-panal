@@ -3,22 +3,25 @@ import { baseURI } from "../../config";
 import * as layoutActions from "../layout-actions";
 import { fetchCategories } from "../categoriesManagementActions/categoriesPage-actions";
 
-export const fetchInitialData = ({ storeId, categoryId }) => {
+export const fetchInitialData = ({ storeId, categoryId, productId }) => {
   return async (dispatch) => {
     try {
       dispatch(isLoading(true));
       const categories = await fetchCategories({ storeId });
       const category = categories.find(
-        (category) => category.CategoryID === Number.parseInt(categoryId)
+        (category) => category.Id === Number.parseInt(categoryId)
       );
-      if (category.PreferenceList?.length) {
+      const product = category.items.find(
+        (item) => item.Id === Number.parseInt(productId)
+      );
+      if (product.preferences?.length) {
         dispatch({
           type: "prefsPage-prefs",
-          data: category.PreferenceList,
+          data: product.preferences,
         });
         dispatch({
           type: "prefsPage-filteredPrefs",
-          data: category.PreferenceList,
+          data: product.preferences,
         });
       }
       dispatch(isLoading(false));
@@ -40,8 +43,8 @@ export const updateFilteredResult = () => {
     const search = getState().prefsPage_reducer.search.toLowerCase().trim();
     const filteredPrefs = prefs.filter(
       (category) =>
-        category.Name.toLowerCase().indexOf(search) !== -1 ||
-        category.PreferenceID.toString().indexOf(search) !== -1
+        category.name.toLowerCase().indexOf(search) !== -1 ||
+        category.id.toString().indexOf(search) !== -1
     );
     dispatch({
       type: "prefsPage-filteredPrefs",
@@ -131,17 +134,17 @@ export const prefsSortBy = (column) => {
       return;
     }
     switch (column) {
-      case "Name":
+      case "name":
         prefs = prefs.sort((a, b) => {
-          a = a.Name;
-          b = b.Name;
+          a = a.name;
+          b = b.name;
           return a < b ? -1 : a > b ? 1 : 0;
         });
         break;
-      case "PreferenceID":
+      case "id":
         prefs = prefs.sort((a, b) => {
-          a = a.PreferenceID;
-          b = b.PreferenceID;
+          a = a.id;
+          b = b.id;
           return a < b ? -1 : a > b ? 1 : 0;
         });
         break;

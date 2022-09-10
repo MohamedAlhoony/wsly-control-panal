@@ -5,27 +5,32 @@ import { dateFormat } from "../../../../config";
 import { Link } from "react-router-dom";
 const CustomersTable = (props) => {
   const getTableItems = (props) => {
-    if (!props.choices.length) {
+    if (!props.products.length) {
       return (
         <Table.Row>
-          <Table.Cell colSpan={4}>لا يوجد نتائج</Table.Cell>
+          <Table.Cell colSpan={7}>لا يوجد نتائج</Table.Cell>
         </Table.Row>
       );
     }
-    return props.choices.map((choice, key) => {
+    return props.products.map((product, key) => {
       return (
         <Table.Row key={key}>
-          <Table.Cell>{choice.Id}</Table.Cell>
-          <Table.Cell>{choice.Name}</Table.Cell>
+          <Table.Cell>{product.Id}</Table.Cell>
+          <Table.Cell>{product.Name}</Table.Cell>
+          <Table.Cell>{product.IsAvailable ? "نعم" : "لا"}</Table.Cell>
           <Table.Cell>
-            <strong>{choice.Price}</strong>
-            &nbsp;دينار ليبي
+            {product.Description === "" ? "_ _" : product.Description}
           </Table.Cell>
-          {/* <Table.Cell>
-            <Link to={`/stores/${props.storeId}/choices/${choice.CategoryID}`}>
-              خيارات التفضيل ({choice.ChoicList.length})
+          <Table.Cell>
+            <strong>{product.Price}</strong> دينار ليبي
+          </Table.Cell>
+          <Table.Cell>
+            <Link
+              to={`/stores/${props.storeId}/categories/${props.categoryId}/products/${product.Id}/preferences`}
+            >
+              التفضيلات ({product.preferences.length})
             </Link>
-          </Table.Cell> */}
+          </Table.Cell>
           <Table.Cell width={"1"}>
             <Dropdown icon={<Icon name={"ellipsis horizontal"} fitted />}>
               <Dropdown.Menu direction={"left"}>
@@ -33,11 +38,11 @@ const CustomersTable = (props) => {
                   text={"تعديل"}
                   icon={"edit"}
                   as={Link}
-                  to={`/choices/${choice.id}/update`}
+                  to={`/products/${product.id}/update`}
                 />
                 <Dropdown.Divider />
                 <Dropdown.Item
-                  onClick={() => props.handleDeleteCustomer(choice)}
+                  onClick={() => props.handleDeleteCustomer(product)}
                   text={"حذف"}
                   icon={"trash"}
                 />

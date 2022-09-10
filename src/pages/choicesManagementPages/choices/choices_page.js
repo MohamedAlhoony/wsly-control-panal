@@ -20,6 +20,7 @@ const Choices_Page = (props) => {
         storeId: props.storeId,
         categoryId: props.categoryId,
         preferenceId: props.preferenceId,
+        productId: props.productId,
       })
     );
     return () => {
@@ -117,5 +118,6 @@ export default connect(({ choicesPage_reducer, layout_reducer }, props) => {
     storeId: props.match.params.storeId,
     categoryId: props.match.params.categoryId,
     preferenceId: props.match.params.preferenceId,
+    productId: props.match.params.productId,
   };
 })(Choices_Page);

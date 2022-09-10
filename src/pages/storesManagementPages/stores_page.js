@@ -39,7 +39,7 @@ const Stores_page = (props) => {
               color="red"
               link
               onClick={() =>
-                props.history.push(`/stores/${store.StoreID}/categories`)
+                props.history.replace(`/stores/${store.StoreID}/categories`)
               }
               style={{ maxWidth: "20rem" }}
               raised

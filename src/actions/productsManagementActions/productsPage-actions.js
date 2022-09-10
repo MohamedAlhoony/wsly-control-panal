@@ -3,12 +3,7 @@ import { baseURI } from "../../config";
 import * as layoutActions from "../layout-actions";
 import { fetchCategories } from "../categoriesManagementActions/categoriesPage-actions";
 
-export const fetchInitialData = ({
-  storeId,
-  categoryId,
-  preferenceId,
-  productId,
-}) => {
+export const fetchInitialData = ({ storeId, categoryId }) => {
   return async (dispatch) => {
     try {
       dispatch(isLoading(true));
@@ -16,20 +11,14 @@ export const fetchInitialData = ({
       const category = categories.find(
         (category) => category.Id === Number.parseInt(categoryId)
       );
-      const product = category.items.find(
-        (item) => item.Id === Number.parseInt(productId)
-      );
-      const pref = product.preferences.find(
-        (pref) => pref.id === Number.parseInt(preferenceId)
-      );
-      if (pref.choices?.length) {
+      if (category.items?.length) {
         dispatch({
-          type: "choicesPage-choices",
-          data: pref.choices,
+          type: "productsPage-products",
+          data: category.items,
         });
         dispatch({
-          type: "choicesPage-filteredChoices",
-          data: pref.choices,
+          type: "productsPage-filteredProducts",
+          data: category.items,
         });
       }
       dispatch(isLoading(false));
@@ -47,24 +36,23 @@ export const fetchInitialData = ({
 
 export const updateFilteredResult = () => {
   return (dispatch, getState) => {
-    const choices = getState().choicesPage_reducer.choices;
-    const search = getState().choicesPage_reducer.search.toLowerCase().trim();
-    const filteredChoices = choices.filter(
+    const products = getState().productsPage_reducer.products;
+    const search = getState().productsPage_reducer.search.toLowerCase().trim();
+    const filteredProducts = products.filter(
       (category) =>
         category.Name.toLowerCase().indexOf(search) !== -1 ||
-        category.Id.toString().indexOf(search) !== -1 ||
-        category.Price.toString().indexOf(search) !== -1
+        category.PreferenceID.toString().indexOf(search) !== -1
     );
     dispatch({
-      type: "choicesPage-filteredChoices",
-      data: filteredChoices,
+      type: "productsPage-filteredProducts",
+      data: filteredProducts,
     });
   };
 };
 
 export const isLoading = (isLoading) => {
   return (dispatch) => {
-    dispatch({ type: "choicesPage-isLoading", data: isLoading });
+    dispatch({ type: "productsPage-isLoading", data: isLoading });
   };
 };
 
@@ -105,14 +93,14 @@ export const removeCustomer = (customerID) => {
           show: true,
         })
       );
-      const choices = await fetchCategories();
+      const products = await fetchCategories();
       dispatch({
-        type: "choicesPage-choices",
-        data: choices,
+        type: "productsPage-products",
+        data: products,
       });
       dispatch({
-        type: "choicesPage-filteredChoices",
-        data: choices,
+        type: "productsPage-filteredProducts",
+        data: products,
       });
 
       dispatch(isLoading(false));
@@ -122,58 +110,51 @@ export const removeCustomer = (customerID) => {
     }
   };
 };
-export const choicesSortBy = (column) => {
+export const productsSortBy = (column) => {
   return (dispatch, getState) => {
-    let choices = getState().choicesPage_reducer.filteredChoices.slice();
-    if (column === getState().choicesPage_reducer.tableSorting.column) {
+    let products = getState().productsPage_reducer.filteredProducts.slice();
+    if (column === getState().productsPage_reducer.tableSorting.column) {
       dispatch({
-        type: "choicesPage-tableSorting",
+        type: "productsPage-tableSorting",
         data: {
           column,
           direction:
-            getState().choicesPage_reducer.tableSorting.direction ===
+            getState().productsPage_reducer.tableSorting.direction ===
             "ascending"
               ? "descending"
               : "ascending",
         },
       });
       dispatch({
-        type: "choicesPage-filteredChoices",
-        data: choices.reverse(),
+        type: "productsPage-filteredProducts",
+        data: products.reverse(),
       });
       return;
     }
     switch (column) {
       case "Name":
-        choices = choices.sort((a, b) => {
+        products = products.sort((a, b) => {
           a = a.Name;
           b = b.Name;
           return a < b ? -1 : a > b ? 1 : 0;
         });
         break;
-      case "Id":
-        choices = choices.sort((a, b) => {
-          a = a.Id;
-          b = b.Id;
-          return a < b ? -1 : a > b ? 1 : 0;
-        });
-        break;
-      case "Price":
-        choices = choices.sort((a, b) => {
-          a = a.Price;
-          b = b.Price;
+      case "PreferenceID":
+        products = products.sort((a, b) => {
+          a = a.PreferenceID;
+          b = b.PreferenceID;
           return a < b ? -1 : a > b ? 1 : 0;
         });
         break;
       default:
     }
     dispatch({
-      type: "choicesPage-tableSorting",
+      type: "productsPage-tableSorting",
       data: { column, direction: "ascending" },
     });
     dispatch({
-      type: "choicesPage-filteredChoices",
-      data: choices,
+      type: "productsPage-filteredProducts",
+      data: products,
     });
   };
 };

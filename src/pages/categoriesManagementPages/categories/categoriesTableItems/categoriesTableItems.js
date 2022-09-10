@@ -15,13 +15,13 @@ const CustomersTable = (props) => {
     return props.categories.map((category, key) => {
       return (
         <Table.Row key={key}>
-          <Table.Cell>{category.CategoryID}</Table.Cell>
-          <Table.Cell>{category.CategoryName}</Table.Cell>
+          <Table.Cell>{category.Id}</Table.Cell>
+          <Table.Cell>{category.Name}</Table.Cell>
           <Table.Cell>
             <Link
-              to={`/stores/${props.storeId}/categories/${category.CategoryID}/preferences`}
+              to={`/stores/${props.storeId}/categories/${category.Id}/products`}
             >
-              عرض التفضيلات ({category.PreferenceList.length})
+              عرض المنتجات ({category.items.length})
             </Link>
           </Table.Cell>
           <Table.Cell width={"1"}>

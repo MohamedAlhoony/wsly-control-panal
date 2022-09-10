@@ -41,12 +41,12 @@ export const fetchCategories = ({ storeId }) => {
     };
     try {
       var response = await fetch(
-        `${baseURI}/store/Categories?StoreID=${storeId}`,
+        `${baseURI}/store/ProductList?StoreID=${storeId}`,
         requestOptions
       );
       const body = JSON.parse(await response.text());
       if (response.status === 200) {
-        resolve(body);
+        resolve(body.categories);
       } else {
         reject({ code: body?.errorCode, message: body?.message });
       }

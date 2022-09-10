@@ -8,20 +8,27 @@ const CustomersTable = (props) => {
     if (!props.prefs.length) {
       return (
         <Table.Row>
-          <Table.Cell colSpan={4}>لا يوجد نتائج</Table.Cell>
+          <Table.Cell colSpan={5}>لا يوجد نتائج</Table.Cell>
         </Table.Row>
       );
     }
     return props.prefs.map((pref, key) => {
       return (
         <Table.Row key={key}>
-          <Table.Cell>{pref.PreferenceID}</Table.Cell>
-          <Table.Cell>{pref.Name}</Table.Cell>
+          <Table.Cell>{pref.id}</Table.Cell>
+          <Table.Cell>{pref.name}</Table.Cell>
+          <Table.Cell>
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {/* <li>المعرف: {pref.choice.Id}</li> */}
+              <li>الاسم: {pref.choice.Name}</li>
+              <li>السعر: {pref.choice.Price} دينار</li>
+            </ul>
+          </Table.Cell>
           <Table.Cell>
             <Link
-              to={`/stores/${props.storeId}/categories/${props.categoryId}/preferences/${pref.PreferenceID}/choices`}
+              to={`/stores/${props.storeId}/categories/${props.categoryId}/products/${props.productId}/preferences/${pref.id}/choices`}
             >
-              خيارات التفضيل ({pref.ChoicList.length})
+              خيارات التفضيل ({pref.choices.length})
             </Link>
           </Table.Cell>
           <Table.Cell width={"1"}>

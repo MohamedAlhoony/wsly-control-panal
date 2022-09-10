@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import * as actions from "../../../actions/prefsManagementActions/prefsPage-actions";
+import * as actions from "../../../actions/productsManagementActions/productsPage-actions";
 import { connect } from "react-redux";
 import PageContainer from "../../../components/pageContainer/pageContainer";
-import PrefsTableItems from "./prefsTableItems/prefsTableItems";
+import ProductsTableItems from "./productsTableItems/productsTableItems";
 import { Table } from "semantic-ui-react";
 import TopMenu from "./topMenu/topMenu";
 import debounce from "lodash.debounce";
@@ -13,24 +13,23 @@ let updateFilteredResult;
 const _updateFilteredResult = debounce((value) => {
   updateFilteredResult(value);
 }, 700);
-const Prefs_Page = (props) => {
+const Products_Page = (props) => {
   useEffect(() => {
     props.dispatch(
       actions.fetchInitialData({
         storeId: props.storeId,
         categoryId: props.categoryId,
-        productId: props.productId,
       })
     );
     return () => {
-      props.dispatch({ type: "reset-prefsPage_reducer" });
+      props.dispatch({ type: "reset-productsPage_reducer" });
     };
   }, []);
   updateFilteredResult = (value) => {
     props.dispatch(actions.updateFilteredResult());
   };
-  const prefsSortBy = (column) => {
-    props.dispatch(actions.prefsSortBy(column));
+  const productsSortBy = (column) => {
+    props.dispatch(actions.productsSortBy(column));
   };
   let confirmedFunction;
   const confirmedHandleDeleteCustomer = (customer) => {
@@ -48,7 +47,7 @@ const Prefs_Page = (props) => {
       <TopMenu
         isDarkMode={props.isDarkMode}
         handleSearchChange={(value) => {
-          props.dispatch({ type: "prefsPage-search", data: value });
+          props.dispatch({ type: "productsPage-search", data: value });
           _updateFilteredResult(value);
         }}
         search={props.search}
@@ -63,7 +62,7 @@ const Prefs_Page = (props) => {
                   : null
               }
               onClick={() => {
-                prefsSortBy("PreferenceID");
+                productsSortBy("PreferenceID");
               }}
             >
               المعرف
@@ -75,23 +74,24 @@ const Prefs_Page = (props) => {
                   : null
               }
               onClick={() => {
-                prefsSortBy("Name");
+                productsSortBy("Name");
               }}
             >
               الإسم
             </Table.HeaderCell>
-            <Table.HeaderCell>الخيار الافتراضي</Table.HeaderCell>
+            <Table.HeaderCell>متاح؟</Table.HeaderCell>
+            <Table.HeaderCell>الوصف</Table.HeaderCell>
+            <Table.HeaderCell>السعر</Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          <PrefsTableItems
+          <ProductsTableItems
             handleDeleteCustomer={handleDeleteCustomer}
-            prefs={props.filteredPrefs}
+            products={props.filteredProducts}
             storeId={props.storeId}
             categoryId={props.categoryId}
-            productId={props.productId}
           />
         </Table.Body>
       </Table>
@@ -99,14 +99,13 @@ const Prefs_Page = (props) => {
   );
 };
 
-export default connect(({ prefsPage_reducer, layout_reducer }, props) => {
+export default connect(({ productsPage_reducer, layout_reducer }, props) => {
   return {
-    isLoading: prefsPage_reducer.isLoading,
-    filteredPrefs: prefsPage_reducer.filteredPrefs,
-    tableSorting: prefsPage_reducer.tableSorting,
-    search: prefsPage_reducer.search,
+    isLoading: productsPage_reducer.isLoading,
+    filteredProducts: productsPage_reducer.filteredProducts,
+    tableSorting: productsPage_reducer.tableSorting,
+    search: productsPage_reducer.search,
     storeId: props.match.params.storeId,
     categoryId: props.match.params.categoryId,
-    productId: props.match.params.productId,
   };
-})(Prefs_Page);
+})(Products_Page);

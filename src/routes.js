@@ -8,6 +8,9 @@ import CategoriesPage from "./pages/categoriesManagementPages/categories/categor
 
 import Prefs_page from "./pages/prefsManagementPages/prefs/prefs_page";
 import choices_page from "./pages/choicesManagementPages/choices/choices_page";
+
+import Products_page from "./pages/productsManagementPages/products/products_page";
+import AddProduct_page from "./pages/productsManagementPages/addProduct/addProduct_page";
 // import RegisterCustomerPage from "./pages/customersManagementPages/registerCustomer/registerCustomer_page";
 // import UpdateCustomerPage from "./pages/customersManagementPages/updateCustomer/updateCustomer_page";
 // import CustomerDetailsPage from "./pages/customersManagementPages/customerDetails/customerDetails_page";
@@ -87,12 +90,22 @@ const Router = () => {
       />
       <ProtectedRoute
         exact
-        path="/stores/:storeId/categories/:categoryId/preferences"
+        path="/stores/:storeId/categories/:categoryId/products/:productId/preferences"
         component={Prefs_page}
       />
       <ProtectedRoute
         exact
-        path="/stores/:storeId/categories/:categoryId/preferences/:preferenceId/choices"
+        path="/stores/:storeId/categories/:categoryId/products/add"
+        component={AddProduct_page}
+      />
+      <ProtectedRoute
+        exact
+        path="/stores/:storeId/categories/:categoryId/products"
+        component={Products_page}
+      />
+      <ProtectedRoute
+        exact
+        path="/stores/:storeId/categories/:categoryId/products/:productId/preferences/:preferenceId/choices"
         component={choices_page}
       />
 
