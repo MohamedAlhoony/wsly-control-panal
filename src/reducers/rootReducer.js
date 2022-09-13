@@ -7,6 +7,7 @@ import prefsPage_reducer from "./prefsManagementReducers/prefsPage-reducer";
 import choicesPage_reducer from "./choicesManagementReducers/choicesPage-reducer";
 import productsPage_reducer from "./productsManagementReducers/productsPage-reducer";
 import addProductPage_reducer from "./productsManagementReducers/addProductPage-reducer";
+import addPrefPage_reducer from "./prefsManagementReducers/addPrefPage-reducer";
 const appReducer = combineReducers({
   layout_reducer,
   loginPage_reducer,
@@ -16,6 +17,7 @@ const appReducer = combineReducers({
   choicesPage_reducer,
   productsPage_reducer,
   addProductPage_reducer,
+  addPrefPage_reducer,
 });
 
 export default (state, action) => {
@@ -40,6 +42,9 @@ export default (state, action) => {
       break;
     case "reset-productsPage_reducer":
       state.productsPage_reducer = undefined;
+      break;
+    case "reset-addPrefPage_reducer":
+      state.addPrefPage_reducer = undefined;
       break;
 
     default:

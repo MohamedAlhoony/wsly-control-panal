@@ -56,6 +56,33 @@ export const fetchCategories = ({ storeId }) => {
   });
 };
 
+export const fetchAllCategories = ({ storeId }) => {
+  return new Promise(async (resolve, reject) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("Authorization", `Bearer ${auth.userData.access_token}`);
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow",
+    };
+    try {
+      var response = await fetch(
+        `${baseURI}/store/Categories?StoreID=${storeId}`,
+        requestOptions
+      );
+      const body = JSON.parse(await response.text());
+      if (response.status === 200) {
+        resolve(body);
+      } else {
+        reject({ code: body?.errorCode, message: body?.message });
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 export const updateFilteredResult = () => {
   return (dispatch, getState) => {
     const categories = getState().categoriesPage_reducer.categories;

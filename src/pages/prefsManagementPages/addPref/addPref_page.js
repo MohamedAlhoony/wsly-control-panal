@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import * as actions from "../../../actions/prefsManagementActions/prefsPage-actions";
+import * as actions from "../../../actions/prefsManagementActions/addPrefPage-actions";
 import { connect } from "react-redux";
 import PageContainer from "../../../components/pageContainer/pageContainer";
 import PrefsTableItems from "./prefsTableItems/prefsTableItems";
-import { Table } from "semantic-ui-react";
+import { Table, Button, Icon } from "semantic-ui-react";
 import TopMenu from "./topMenu/topMenu";
 import debounce from "lodash.debounce";
 import ConfirmDialog from "../../../components/confirmDialog/confirmDialog";
@@ -13,7 +13,7 @@ let updateFilteredResult;
 const _updateFilteredResult = debounce((value) => {
   updateFilteredResult(value);
 }, 700);
-const Prefs_Page = (props) => {
+const AddPref_Page = (props) => {
   useEffect(() => {
     props.dispatch(
       actions.fetchInitialData({
@@ -23,7 +23,7 @@ const Prefs_Page = (props) => {
       })
     );
     return () => {
-      props.dispatch({ type: "reset-prefsPage_reducer" });
+      props.dispatch({ type: "reset-addPrefPage_reducer" });
     };
   }, []);
   updateFilteredResult = (value) => {
@@ -42,21 +42,42 @@ const Prefs_Page = (props) => {
     };
     props.dispatch(confirmDialog({ show: true }));
   };
+  const togglePref = (prefId) => {
+    props.dispatch(actions.togglePref(prefId));
+  };
+  const toggleChoice = (prefId, choiceId) => {
+    props.dispatch(actions.toggleChoice(prefId, choiceId));
+  };
+
+  const toggleChoiceDefault = (prefId, choiceId) => {
+    props.dispatch(actions.toggleChoiceDefault(prefId, choiceId));
+  };
+
+  const handleSubmit = () => {
+    props.dispatch(
+      actions.submitForm({
+        storeId: props.storeId,
+        categoryId: props.categoryId,
+        productId: props.productId,
+      })
+    );
+  };
   return (
     <PageContainer loading={props.isLoading}>
       <ConfirmDialog onConfirm={(_) => confirmedFunction(_)} />
       <TopMenu
+        handleSubmit={handleSubmit}
         isDarkMode={props.isDarkMode}
         handleSearchChange={(value) => {
-          props.dispatch({ type: "prefsPage-search", data: value });
+          props.dispatch({ type: "addPrefPage-search", data: value });
           _updateFilteredResult(value);
         }}
         search={props.search}
       />
-      <Table inverted={props.isDarkMode} stackable striped celled sortable>
+      <Table inverted={props.isDarkMode} stackable sortable celled>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell
+            {/* <Table.HeaderCell
               sorted={
                 props.tableSorting.column === "id"
                   ? props.tableSorting.direction
@@ -67,7 +88,7 @@ const Prefs_Page = (props) => {
               }}
             >
               المعرف
-            </Table.HeaderCell>
+            </Table.HeaderCell> */}
             <Table.HeaderCell
               sorted={
                 props.tableSorting.column === "name"
@@ -80,13 +101,18 @@ const Prefs_Page = (props) => {
             >
               الإسم
             </Table.HeaderCell>
-            <Table.HeaderCell>الخيار الافتراضي</Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
+            <Table.HeaderCell>
+              اختيار
+              <Icon name="arrow down" />
+            </Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
           <PrefsTableItems
+            togglePref={togglePref}
+            toggleChoice={toggleChoice}
+            toggleChoiceDefault={toggleChoiceDefault}
             handleDeleteCustomer={handleDeleteCustomer}
             prefs={props.filteredPrefs}
             storeId={props.storeId}
@@ -94,19 +120,40 @@ const Prefs_Page = (props) => {
             productId={props.productId}
           />
         </Table.Body>
+
+        {/* <Table.Footer fullWidth>
+          <Table.Row>
+            <Table.HeaderCell />
+            <Table.HeaderCell colSpan="4">
+              <Button
+                floated="right"
+                icon
+                labelPosition="left"
+                primary
+                size="small"
+              >
+                <Icon name="user" /> Add User
+              </Button>
+              <Button size="small">Approve</Button>
+              <Button disabled size="small">
+                Approve All
+              </Button>
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Footer> */}
       </Table>
     </PageContainer>
   );
 };
 
-export default connect(({ prefsPage_reducer, layout_reducer }, props) => {
+export default connect(({ addPrefPage_reducer, layout_reducer }, props) => {
   return {
-    isLoading: prefsPage_reducer.isLoading,
-    filteredPrefs: prefsPage_reducer.filteredPrefs,
-    tableSorting: prefsPage_reducer.tableSorting,
-    search: prefsPage_reducer.search,
+    isLoading: addPrefPage_reducer.isLoading,
+    filteredPrefs: addPrefPage_reducer.filteredPrefs,
+    tableSorting: addPrefPage_reducer.tableSorting,
+    search: addPrefPage_reducer.search,
     storeId: props.match.params.storeId,
     categoryId: props.match.params.categoryId,
     productId: props.match.params.productId,
   };
-})(Prefs_Page);
+})(AddPref_Page);

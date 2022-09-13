@@ -4,7 +4,18 @@ import { Link } from "react-router-dom";
 const TopMenu = (props) => {
   return (
     <Menu inverted={props.isDarkMode} stackable>
-      <Menu.Item>
+      <Menu.Item position={"left"}>
+        <Button
+          inverted={props.isDarkMode}
+          // as={Link}
+          // to={"./preferences/add"}
+          onClick={props.handleSubmit}
+          content={"إضافة"}
+          className="primary"
+          // icon={<Icon name={"plus"} />}
+        />
+      </Menu.Item>
+      {/* <Menu.Item>
         <Input
           inverted={props.isDarkMode}
           onChange={(event) => props.handleSearchChange(event.target.value)}
@@ -12,17 +23,7 @@ const TopMenu = (props) => {
           icon="filter"
           placeholder="فلترة..."
         />
-      </Menu.Item>
-      <Menu.Item position={"right"}>
-        <Button
-          inverted={props.isDarkMode}
-          as={Link}
-          to={"./preferences/add"}
-          content={"تفضيل جديد"}
-          className="primary"
-          icon={<Icon name={"plus"} />}
-        />
-      </Menu.Item>
+      </Menu.Item> */}
     </Menu>
   );
 };

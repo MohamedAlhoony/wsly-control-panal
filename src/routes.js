@@ -11,6 +11,8 @@ import choices_page from "./pages/choicesManagementPages/choices/choices_page";
 
 import Products_page from "./pages/productsManagementPages/products/products_page";
 import AddProduct_page from "./pages/productsManagementPages/addProduct/addProduct_page";
+
+import AddPref_page from "./pages/prefsManagementPages/addPref/addPref_page";
 // import RegisterCustomerPage from "./pages/customersManagementPages/registerCustomer/registerCustomer_page";
 // import UpdateCustomerPage from "./pages/customersManagementPages/updateCustomer/updateCustomer_page";
 // import CustomerDetailsPage from "./pages/customersManagementPages/customerDetails/customerDetails_page";
@@ -92,6 +94,11 @@ const Router = () => {
         exact
         path="/stores/:storeId/categories/:categoryId/products/:productId/preferences"
         component={Prefs_page}
+      />
+      <ProtectedRoute
+        exact
+        path="/stores/:storeId/categories/:categoryId/products/:productId/preferences/add"
+        component={AddPref_page}
       />
       <ProtectedRoute
         exact
