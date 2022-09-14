@@ -34,12 +34,20 @@ const Choices_Page = (props) => {
     props.dispatch(actions.choicesSortBy(column));
   };
   let confirmedFunction;
-  const confirmedHandleDeleteCustomer = (customer) => {
-    props.dispatch(actions.removeCustomer(customer.id));
+  const confirmedSetAsDefault = (choice) => {
+    props.dispatch(
+      actions.setAsDefault({
+        storeId: props.storeId,
+        categoryId: props.categoryId,
+        preferenceId: props.preferenceId,
+        productId: props.productId,
+        choiceId: choice.Id,
+      })
+    );
   };
-  const handleDeleteCustomer = (customer) => {
+  const setAsDefault = (choice) => {
     confirmedFunction = () => {
-      confirmedHandleDeleteCustomer(customer);
+      confirmedSetAsDefault(choice);
     };
     props.dispatch(confirmDialog({ show: true }));
   };
@@ -59,12 +67,12 @@ const Choices_Page = (props) => {
           <Table.Row>
             <Table.HeaderCell
               sorted={
-                props.tableSorting.column === "ChoicID"
+                props.tableSorting.column === "Id"
                   ? props.tableSorting.direction
                   : null
               }
               onClick={() => {
-                choicesSortBy("ChoicID");
+                choicesSortBy("Id");
               }}
             >
               المعرف
@@ -80,6 +88,18 @@ const Choices_Page = (props) => {
               }}
             >
               الإسم
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              sorted={
+                props.tableSorting.column === "isDefault"
+                  ? props.tableSorting.direction
+                  : null
+              }
+              onClick={() => {
+                choicesSortBy("isDefault");
+              }}
+            >
+              خيار افتراضي
             </Table.HeaderCell>
 
             <Table.HeaderCell
@@ -99,7 +119,7 @@ const Choices_Page = (props) => {
         </Table.Header>
         <Table.Body>
           <ChoicesTableItems
-            handleDeleteCustomer={handleDeleteCustomer}
+            setAsDefault={setAsDefault}
             choices={props.filteredChoices}
             storeId={props.storeId}
           />

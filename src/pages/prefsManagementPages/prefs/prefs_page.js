@@ -81,7 +81,7 @@ const Prefs_Page = (props) => {
               الإسم
             </Table.HeaderCell>
             <Table.HeaderCell>الخيار الافتراضي</Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
+            {/* <Table.HeaderCell></Table.HeaderCell> */}
             <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>

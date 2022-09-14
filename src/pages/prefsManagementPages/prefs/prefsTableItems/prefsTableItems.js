@@ -31,7 +31,7 @@ const CustomersTable = (props) => {
               خيارات التفضيل ({pref.choices.length})
             </Link>
           </Table.Cell>
-          <Table.Cell width={"1"}>
+          {/* <Table.Cell width={"1"}>
             <Dropdown icon={<Icon name={"ellipsis horizontal"} fitted />}>
               <Dropdown.Menu direction={"left"}>
                 <Dropdown.Item
@@ -48,7 +48,7 @@ const CustomersTable = (props) => {
                 />
               </Dropdown.Menu>
             </Dropdown>
-          </Table.Cell>
+          </Table.Cell> */}
         </Table.Row>
       );
     });

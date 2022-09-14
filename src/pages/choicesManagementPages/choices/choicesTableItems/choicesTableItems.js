@@ -17,6 +17,7 @@ const CustomersTable = (props) => {
         <Table.Row key={key}>
           <Table.Cell>{choice.Id}</Table.Cell>
           <Table.Cell>{choice.Name}</Table.Cell>
+          <Table.Cell>{choice.isDefault ? "نعم" : "لا"}</Table.Cell>
           <Table.Cell>
             <strong>{choice.Price}</strong>
             &nbsp;دينار ليبي
@@ -29,17 +30,17 @@ const CustomersTable = (props) => {
           <Table.Cell width={"1"}>
             <Dropdown icon={<Icon name={"ellipsis horizontal"} fitted />}>
               <Dropdown.Menu direction={"left"}>
-                <Dropdown.Item
+                {/* <Dropdown.Item
                   text={"تعديل"}
                   icon={"edit"}
                   as={Link}
                   to={`/choices/${choice.id}/update`}
-                />
-                <Dropdown.Divider />
+                /> */}
+                {/* <Dropdown.Divider /> */}
                 <Dropdown.Item
-                  onClick={() => props.handleDeleteCustomer(choice)}
-                  text={"حذف"}
-                  icon={"trash"}
+                  onClick={() => props.setAsDefault(choice)}
+                  text={"تعيين كخيار افتراضي"}
+                  // icon={"edit"}
                 />
               </Dropdown.Menu>
             </Dropdown>

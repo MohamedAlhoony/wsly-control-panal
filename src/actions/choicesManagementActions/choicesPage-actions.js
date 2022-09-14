@@ -22,6 +22,12 @@ export const fetchInitialData = ({
       const pref = product.preferences.find(
         (pref) => pref.id === Number.parseInt(preferenceId)
       );
+      pref.choices = pref.choices.map((choice) => {
+        return {
+          ...choice,
+          isDefault: choice.Id === pref.choice.Id ? true : false,
+        };
+      });
       if (pref.choices?.length) {
         dispatch({
           type: "choicesPage-choices",
@@ -68,18 +74,18 @@ export const isLoading = (isLoading) => {
   };
 };
 
-const sendRemoveCustomer = (customerID) => {
+const sendSetAsDefault = (choiceId) => {
   return new Promise(async (resolve, reject) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${auth.userData.access_token}`);
     var requestOptions = {
-      method: "DELETE",
+      method: "POST",
       headers: myHeaders,
       redirect: "follow",
     };
     try {
       const response = await fetch(
-        `${baseURI}/dashboard/users/${customerID}`,
+        `${baseURI}/store/DefaultChoic?ChoicID=${choiceId}`,
         requestOptions
       );
       const responseText = await response.text();
@@ -95,25 +101,48 @@ const sendRemoveCustomer = (customerID) => {
   });
 };
 
-export const removeCustomer = (customerID) => {
+export const setAsDefault = ({
+  storeId,
+  categoryId,
+  preferenceId,
+  productId,
+  choiceId,
+}) => {
   return async (dispatch, getState) => {
     try {
       dispatch(isLoading(true));
-      await sendRemoveCustomer(customerID);
+      await sendSetAsDefault(choiceId);
       dispatch(
         layoutActions.alertModal({
           show: true,
         })
       );
-      const choices = await fetchCategories();
-      dispatch({
-        type: "choicesPage-choices",
-        data: choices,
+      const categories = await fetchCategories({ storeId });
+      const category = categories.find(
+        (category) => category.Id === Number.parseInt(categoryId)
+      );
+      const product = category.items.find(
+        (item) => item.Id === Number.parseInt(productId)
+      );
+      const pref = product.preferences.find(
+        (pref) => pref.id === Number.parseInt(preferenceId)
+      );
+      pref.choices = pref.choices.map((choice) => {
+        return {
+          ...choice,
+          isDefault: choice.Id === pref.choice.Id ? true : false,
+        };
       });
-      dispatch({
-        type: "choicesPage-filteredChoices",
-        data: choices,
-      });
+      if (pref.choices?.length) {
+        dispatch({
+          type: "choicesPage-choices",
+          data: pref.choices,
+        });
+        dispatch({
+          type: "choicesPage-filteredChoices",
+          data: pref.choices,
+        });
+      }
 
       dispatch(isLoading(false));
     } catch (error) {
@@ -148,6 +177,13 @@ export const choicesSortBy = (column) => {
         choices = choices.sort((a, b) => {
           a = a.Name;
           b = b.Name;
+          return a < b ? -1 : a > b ? 1 : 0;
+        });
+        break;
+      case "isDefault":
+        choices = choices.sort((a, b) => {
+          a = a.isDefault;
+          b = b.isDefault;
           return a < b ? -1 : a > b ? 1 : 0;
         });
         break;

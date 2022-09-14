@@ -38,14 +38,14 @@ const CustomersTable = (props) => {
                   text={"تعديل"}
                   icon={"edit"}
                   as={Link}
-                  to={`/products/${product.id}/update`}
+                  to={`./products/${product.Id}/update`}
                 />
-                <Dropdown.Divider />
+                {/* <Dropdown.Divider />
                 <Dropdown.Item
                   onClick={() => props.handleDeleteCustomer(product)}
                   text={"حذف"}
                   icon={"trash"}
-                />
+                /> */}
               </Dropdown.Menu>
             </Dropdown>
           </Table.Cell>

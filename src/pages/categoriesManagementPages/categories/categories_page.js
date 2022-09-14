@@ -76,7 +76,7 @@ const Categories_Page = (props) => {
             </Table.HeaderCell>
 
             <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
+            {/* <Table.HeaderCell></Table.HeaderCell> */}
           </Table.Row>
         </Table.Header>
         <Table.Body>
