@@ -18,9 +18,9 @@ const TopMenu = (props) => {
           inverted={props.isDarkMode}
           as={Link}
           to={"./preferences/add"}
-          content={"تفضيل جديد"}
+          content={"تفضيلات المنتج"}
           className="primary"
-          icon={<Icon name={"plus"} />}
+          icon={<Icon name={"edit"} />}
         />
       </Menu.Item>
     </Menu>

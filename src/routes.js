@@ -13,6 +13,8 @@ import Products_page from "./pages/productsManagementPages/products/products_pag
 import AddProduct_page from "./pages/productsManagementPages/addProduct/addProduct_page";
 
 import AddPref_page from "./pages/prefsManagementPages/addPref/addPref_page";
+
+import All_page from "./pages/allManagementPages/all/all_page";
 // import RegisterCustomerPage from "./pages/customersManagementPages/registerCustomer/registerCustomer_page";
 // import UpdateCustomerPage from "./pages/customersManagementPages/updateCustomer/updateCustomer_page";
 // import CustomerDetailsPage from "./pages/customersManagementPages/customerDetails/customerDetails_page";
@@ -85,6 +87,7 @@ const Router = () => {
     <Switch>
       <Route path={"/login"} component={LoginPage} />
       <ProtectedRoute noLayout exact path="/" component={StoresPage} />
+      <ProtectedRoute exact path="/stores/:storeId/" component={All_page} />
       <ProtectedRoute
         exact
         path="/stores/:storeId/categories"

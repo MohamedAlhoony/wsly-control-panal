@@ -10,7 +10,7 @@ const TopMenu = (props) => {
           // as={Link}
           // to={"./preferences/add"}
           onClick={props.handleSubmit}
-          content={"إضافة"}
+          content={"ارسال"}
           className="primary"
           // icon={<Icon name={"plus"} />}
         />

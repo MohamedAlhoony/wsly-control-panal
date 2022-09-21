@@ -16,18 +16,21 @@ const sendFormData = ({ storeId, categoryId, productId, prefs }) => {
       headers: myHeaders,
       redirect: "follow",
       body: JSON.stringify({
-        ItemID: productId,
+        ItemID: Number.parseInt(productId),
         PreferenceList: prefs
           .filter((pref) => pref.selected === true)
           .map((pref) => {
             return {
               PreferenceID: Number.parseInt(pref.PreferenceID),
+              Name: pref.Name,
               DefaultChoic: pref.ChoicList.find(
                 (choice) => choice.selected === true
               ).ChoicID,
               ChoicList: pref.ChoicList.map((choice) => {
                 return {
                   ChoicID: choice.ChoicID,
+                  Price: choice.Price,
+                  Name: choice.Name,
                 };
               }),
             };
@@ -50,7 +53,10 @@ const sendFormData = ({ storeId, categoryId, productId, prefs }) => {
     };
 
     try {
-      const response = await fetch(`${baseURI}/store/item`, requestOptions);
+      const response = await fetch(
+        `${baseURI}/store/ItemPreference`,
+        requestOptions
+      );
       let body = {};
       try {
         body = JSON.parse(await response.text());

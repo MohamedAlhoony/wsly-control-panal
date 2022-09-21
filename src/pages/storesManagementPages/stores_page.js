@@ -38,9 +38,7 @@ const Stores_page = (props) => {
             <Card
               color="red"
               link
-              onClick={() =>
-                props.history.replace(`/stores/${store.StoreID}/categories`)
-              }
+              onClick={() => props.history.replace(`/stores/${store.StoreID}`)}
               style={{ maxWidth: "20rem" }}
               raised
               key={key}
