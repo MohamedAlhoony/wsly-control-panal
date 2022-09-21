@@ -64,6 +64,10 @@ export const submitForm = ({ storeId }) => {
       dispatch(isLoading(true));
       await sendFormData({ storeId, prefs, productId: selectedItem.Id });
       const categories = await fetchCategories({ storeId });
+      dispatch({
+        type: "allPage-isChanged",
+        data: false,
+      });
       if (categories.length) {
         dispatch({
           type: "allPage-categories",
@@ -75,6 +79,7 @@ export const submitForm = ({ storeId }) => {
           show: true,
         })
       );
+
       dispatch(isLoading(false));
     } catch (error) {
       dispatch(layoutActions.handleHttpError(error));
@@ -142,6 +147,10 @@ export const togglePref = (prefId) => {
       type: "allPage-selectedItemPrefs",
       data: selectedItemPrefs,
     });
+    dispatch({
+      type: "allPage-isChanged",
+      data: true,
+    });
   };
 };
 export const toggleChoice = (prefId, choiceId) => {
@@ -159,6 +168,10 @@ export const toggleChoice = (prefId, choiceId) => {
       type: "allPage-selectedItemPrefs",
       data: selectedItemPrefs,
     });
+    dispatch({
+      type: "allPage-isChanged",
+      data: true,
+    });
   };
 };
 export const toggleChoiceDefault = (prefId, choiceId) => {
@@ -171,6 +184,44 @@ export const toggleChoiceDefault = (prefId, choiceId) => {
       choice.isDefault = false;
     });
     choice.isDefault = true;
+    dispatch({
+      type: "allPage-selectedItemPrefs",
+      data: selectedItemPrefs,
+    });
+    dispatch({
+      type: "allPage-isChanged",
+      data: true,
+    });
+  };
+};
+export const handeChoicePriceChange = (prefId, choiceId, value) => {
+  return (dispatch, getState) => {
+    let selectedItemPrefs =
+      getState().allPage_reducer.selectedItemPrefs.slice();
+    let pref = selectedItemPrefs.find((pref) => pref.PreferenceID === prefId);
+    let choice = pref.ChoicList.find((choice) => choice.ChoicID === choiceId);
+    choice.Price = value;
+    dispatch({
+      type: "allPage-selectedItemPrefs",
+      data: selectedItemPrefs,
+    });
+    dispatch({
+      type: "allPage-isChanged",
+      data: true,
+    });
+  };
+};
+
+export const handlePrefExpandClick = (prefId) => {
+  return (dispatch, getState) => {
+    let selectedItemPrefs =
+      getState().allPage_reducer.selectedItemPrefs.slice();
+    let pref = selectedItemPrefs.find((pref) => pref.PreferenceID === prefId);
+    if (pref.isExpanded) {
+      pref.isExpanded = false;
+    } else {
+      pref.isExpanded = true;
+    }
     dispatch({
       type: "allPage-selectedItemPrefs",
       data: selectedItemPrefs,

@@ -1,6 +1,8 @@
 let defaultState = {
   isLoading: true,
   selectedItemPrefs: [],
+  isChanged: false,
+  selectedItemPrefsOriginal: [],
   selectedItem: null,
   categories: [],
   allCategories: [],
@@ -29,6 +31,11 @@ const allPage_reducer = (state = defaultState, action) => {
       return {
         ...state,
         selectedItemPrefs: action.data,
+      };
+    case "allPage-isChanged":
+      return {
+        ...state,
+        isChanged: action.data,
       };
     case "allPage-selectedItem":
       return {

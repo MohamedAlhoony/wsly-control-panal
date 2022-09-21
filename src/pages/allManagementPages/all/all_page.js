@@ -39,6 +39,12 @@ const All_Page = (props) => {
       })
     );
   };
+  const handlePrefExpandClick = (prefId) => {
+    props.dispatch(actions.handlePrefExpandClick(prefId));
+  };
+  const handeChoicePriceChange = (prefId, choiceId, value) => {
+    props.dispatch(actions.handeChoicePriceChange(prefId, choiceId, value));
+  };
   return (
     <PageContainer loading={props.isLoading}>
       <Grid>
@@ -63,12 +69,15 @@ const All_Page = (props) => {
         <Grid.Row>
           {props.selectedItem !== null ? (
             <Preferences
+              handeChoicePriceChange={handeChoicePriceChange}
+              handlePrefExpandClick={handlePrefExpandClick}
               saveClick={saveClick}
               toggleChoice={toggleChoice}
               togglePref={togglePref}
               toggleChoiceDefault={toggleChoiceDefault}
               selectedItem={props.selectedItem}
               selectedItemPrefs={props.selectedItemPrefs}
+              isChanged={props.isChanged}
             />
           ) : null}
         </Grid.Row>
@@ -85,6 +94,6 @@ export default connect(({ allPage_reducer, layout_reducer }, props) => {
     activeCategoryTab: allPage_reducer.activeCategoryTab,
     selectedItemPrefs: allPage_reducer.selectedItemPrefs,
     selectedItem: allPage_reducer.selectedItem,
-    // originalPref:allPage_reducer.categories[allPage_reducer.activeCategoryTab]?.items.find((item)=>item.Id===allPage_reducer.selectedItem?.Id)
+    isChanged: allPage_reducer.isChanged,
   };
 })(All_Page);
