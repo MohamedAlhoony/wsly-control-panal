@@ -8,9 +8,17 @@ const Items = (props) => {
     <>
       {props.items.map((item, key) => {
         return (
-          <Grid.Column computer={4} mobile={8} key={key}>
+          <Grid.Column
+            style={{ padding: "0.5rem" }}
+            computer={16}
+            tablet={4}
+            widescreen={16}
+            largeScreen={16}
+            mobile={8}
+            key={key}
+          >
             <Card
-              style={{ zIndex: 1 }}
+              style={{ zIndex: 1, width: "100%", height: "100%" }}
               color={props.selectedItem?.Id === item.Id ? "red" : undefined}
               link
               onClick={() => {

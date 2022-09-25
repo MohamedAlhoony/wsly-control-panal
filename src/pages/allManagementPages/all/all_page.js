@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import * as actions from "../../../actions/allManagementActions/allPage-actions";
 import { connect } from "react-redux";
 import PageContainer from "../../../components/pageContainer/pageContainer";
-import { Grid, Table, Menu, Button, Icon } from "semantic-ui-react";
+import { Grid, Table, Menu, Button, Icon, Header } from "semantic-ui-react";
 import debounce from "lodash.debounce";
 import ConfirmDialog from "../../../components/confirmDialog/confirmDialog";
 import { confirmDialog } from "../../../actions/layout-actions";
@@ -60,26 +60,39 @@ const All_Page = (props) => {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <Items
-            selectedItem={props.selectedItem}
-            handleItemClick={handleItemClick}
-            items={props.categories[props.activeCategoryTab]?.items}
-          />
-        </Grid.Row>
-        <Grid.Row>
-          {props.selectedItem !== null ? (
-            <Preferences
-              handeChoicePriceChange={handeChoicePriceChange}
-              handlePrefExpandClick={handlePrefExpandClick}
-              saveClick={saveClick}
-              toggleChoice={toggleChoice}
-              togglePref={togglePref}
-              toggleChoiceDefault={toggleChoiceDefault}
-              selectedItem={props.selectedItem}
-              selectedItemPrefs={props.selectedItemPrefs}
-              isChanged={props.isChanged}
-            />
-          ) : null}
+          <Grid.Column computer={4} mobile={16} style={{ paddingTop: "1rem" }}>
+            <Grid>
+              <Grid.Row style={{ flex: 1 }}>
+                <Items
+                  selectedItem={props.selectedItem}
+                  handleItemClick={handleItemClick}
+                  items={props.categories[props.activeCategoryTab]?.items}
+                />
+              </Grid.Row>
+            </Grid>
+          </Grid.Column>
+          <Grid.Column style={{ flex: 1, paddingTop: "1rem" }}>
+            <Grid.Row>
+              {props.selectedItem !== null ? (
+                <Preferences
+                  handeChoicePriceChange={handeChoicePriceChange}
+                  handlePrefExpandClick={handlePrefExpandClick}
+                  saveClick={saveClick}
+                  toggleChoice={toggleChoice}
+                  togglePref={togglePref}
+                  toggleChoiceDefault={toggleChoiceDefault}
+                  selectedItem={props.selectedItem}
+                  selectedItemPrefs={props.selectedItemPrefs}
+                  isChanged={props.isChanged}
+                />
+              ) : !props.isLoading ? (
+                <Header
+                  icon={"edit"}
+                  content={"اضغط على المنتج لعرض التفضيلات"}
+                />
+              ) : null}
+            </Grid.Row>
+          </Grid.Column>
         </Grid.Row>
       </Grid>
     </PageContainer>
