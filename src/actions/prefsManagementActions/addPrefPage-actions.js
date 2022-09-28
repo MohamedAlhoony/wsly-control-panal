@@ -11,6 +11,7 @@ const sendFormData = ({ storeId, categoryId, productId, prefs }) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${auth.userData.access_token}`);
     myHeaders.append("Content-Type", "application/json");
+
     var requestOptions = {
       method: "POST",
       headers: myHeaders,
@@ -23,10 +24,12 @@ const sendFormData = ({ storeId, categoryId, productId, prefs }) => {
             return {
               PreferenceID: Number.parseInt(pref.PreferenceID),
               Name: pref.Name,
-              DefaultChoic: pref.ChoicList.find(
+              DefaultChoic: pref.ChoicList.filter(
+                (choice) => choice.isDefault === true
+              )[0].ChoicID,
+              ChoicList: pref.ChoicList.filter(
                 (choice) => choice.selected === true
-              ).ChoicID,
-              ChoicList: pref.ChoicList.map((choice) => {
+              ).map((choice) => {
                 return {
                   ChoicID: choice.ChoicID,
                   Price: choice.Price,

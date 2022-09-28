@@ -60,7 +60,16 @@ const All_Page = (props) => {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <Grid.Column computer={4} mobile={16} style={{ paddingTop: "1rem" }}>
+          <Grid.Column
+            computer={4}
+            mobile={16}
+            style={{
+              paddingTop: "1rem",
+              position: "sticky",
+              top: "1px",
+              display: "block",
+            }}
+          >
             <Grid>
               <Grid.Row style={{ flex: 1 }}>
                 <Items
