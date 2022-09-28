@@ -105,7 +105,13 @@ export const normalize = (prefList, productPreferences) => {
           selected: thePref?.choices?.some((productChoice) => {
             return productChoice.Id === choice.ChoicID;
           }),
-          isDefault: pref.DefaultChoic === choice.ChoicID ? true : false,
+          isDefault: thePref
+            ? thePref?.choice?.Id === choice.ChoicID
+              ? true
+              : false
+            : pref.DefaultChoic === choice.ChoicID
+            ? true
+            : false,
         };
       }),
     };
