@@ -65,8 +65,8 @@ const All_Page = (props) => {
             mobile={16}
             style={{
               paddingTop: "1rem",
-              position: "sticky",
-              top: "1px",
+              // position: "sticky",
+              // top: "1px",
               display: "block",
             }}
           >

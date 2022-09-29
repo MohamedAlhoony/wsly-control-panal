@@ -96,12 +96,18 @@ export const normalize = (prefList, productPreferences) => {
     const thePref = productPreferences?.find((item) => {
       return item.id === pref.PreferenceID;
     });
+    console.log(thePref);
     return {
       ...pref,
       selected: thePref ? true : false,
       ChoicList: pref.ChoicList.map((choice) => {
         return {
           ...choice,
+          Price:
+            thePref?.choices.find((choic) => {
+              return choic.Id === choice.ChoicID;
+            })?.Price ?? 0,
+
           selected: thePref?.choices?.some((productChoice) => {
             return productChoice.Id === choice.ChoicID;
           }),
@@ -208,7 +214,7 @@ export const handeChoicePriceChange = (prefId, choiceId, value) => {
       getState().allPage_reducer.selectedItemPrefs.slice();
     let pref = selectedItemPrefs.find((pref) => pref.PreferenceID === prefId);
     let choice = pref.ChoicList.find((choice) => choice.ChoicID === choiceId);
-    choice.Price = value;
+    choice.Price = Number.parseInt(value);
     dispatch({
       type: "allPage-selectedItemPrefs",
       data: selectedItemPrefs,
