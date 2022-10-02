@@ -96,7 +96,6 @@ export const normalize = (prefList, productPreferences) => {
     const thePref = productPreferences?.find((item) => {
       return item.id === pref.PreferenceID;
     });
-    console.log(thePref);
     return {
       ...pref,
       selected: thePref ? true : false,

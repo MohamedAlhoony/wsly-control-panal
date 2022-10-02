@@ -114,11 +114,6 @@ const All_Page = (props) => {
                   selectedItemPrefs={props.selectedItemPrefs}
                   isChanged={props.isChanged}
                 />
-              ) : !props.isLoading ? (
-                <Header
-                  icon={"edit"}
-                  content={"اضغط على المنتج لعرض التفضيلات"}
-                />
               ) : null}
             </Grid.Row>
           </Grid.Column>
