@@ -18,7 +18,12 @@ const AddProduct_Page = (props) => {
     props.dispatch(actions.changeFormFieldValue(value, id));
   };
   const confirmedSubmitForm = () => {
-    props.dispatch(actions.submitForm({ categoryId: props.categoryId }));
+    props.dispatch(
+      actions.submitForm({
+        categoryId: props.categoryId,
+        storeId: props.storeId,
+      })
+    );
   };
   const submitForm = () => {
     props.dispatch(
@@ -70,6 +75,7 @@ export default connect(({ addProductPage_reducer }, props) => {
     isLoading: addProductPage_reducer.isLoading,
     formData: addProductPage_reducer.formData,
     categoryId: props.match.params.categoryId,
+    storeId: props.match.params.storeId,
     // roles: addProductPage_reducer.roles,
   };
 })(AddProduct_Page);

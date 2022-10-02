@@ -9,9 +9,7 @@ import auth from "../../auth";
 import { connect } from "react-redux";
 import RefreshDialog from "../../components/refreshDialog/refreshDialog";
 const Layout = (props) => {
-  const [isToggleAllowed, setIsToggleAllowed] = useState(
-    window.innerWidth < 900 ? true : false
-  );
+  const [isToggleAllowed, setIsToggleAllowed] = useState(true);
   useEffect(() => {
     props.history.listen(() => {
       if (props.isRefreshDialogVisible) {
@@ -21,19 +19,19 @@ const Layout = (props) => {
         props.dispatch(actions.alertModal({ show: false }));
       }
     });
-    window.addEventListener("resize", handeWindowWidthResize, false);
-    return () => {
-      window.removeEventListener("resize", handeWindowWidthResize);
-    };
+    // window.addEventListener("resize", handeWindowWidthResize, false);
+    // return () => {
+    //   window.removeEventListener("resize", handeWindowWidthResize);
+    // };
   }, [props.alertModal]);
   const emptyRef = useRef(null);
-  const handeWindowWidthResize = () => {
-    if (window.innerWidth < 900) {
-      setIsToggleAllowed(true);
-    } else {
-      setIsToggleAllowed(false);
-    }
-  };
+  // const handeWindowWidthResize = () => {
+  //   if (window.innerWidth < 900) {
+  //     setIsToggleAllowed(true);
+  //   } else {
+  //     setIsToggleAllowed(false);
+  //   }
+  // };
   const closeAlertModal = () => {
     props.dispatch(actions.alertModal({ show: false }));
   };

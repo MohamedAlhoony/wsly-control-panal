@@ -156,7 +156,14 @@ const MovingSideBar = (props) => {
           </Menu.Header>
         ) : null}
         <Menu.Item>
-          <span style={{ fontSize: "2rem", fontWeight: "bolder" }}>Istore</span>
+          <span
+            style={{
+              fontSize: "1.6rem",
+              fontWeight: "bolder",
+            }}
+          >
+            iStore Managment
+          </span>
         </Menu.Item>
         <SidebarItems
           hideSideBar={() => {

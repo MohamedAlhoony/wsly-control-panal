@@ -1,11 +1,28 @@
 import React from "react";
-import { Card, Grid, Icon } from "semantic-ui-react";
+import { Card, Grid, Icon, Button } from "semantic-ui-react";
+import { useHistory } from "react-router-dom";
 const Items = (props) => {
+  const history = useHistory();
   if (!props.items) {
     return <div></div>;
   }
   return (
     <>
+      <Grid.Column style={{ padding: "0.5rem" }} width={16}>
+        <Button
+          primary
+          icon={"add"}
+          // size={"small"}
+          onClick={() => {
+            history.push(
+              `./${props.storeId}/categories/${
+                props.categories[props.activeCategoryTab].Id
+              }/products/add`
+            );
+          }}
+          content={"إضافة منتج"}
+        />
+      </Grid.Column>
       {props.items.map((item, key) => {
         return (
           <Grid.Column

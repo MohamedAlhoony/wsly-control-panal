@@ -59,6 +59,23 @@ const All_Page = (props) => {
             ) : null}
           </Grid.Column>
         </Grid.Row>
+        {/* <Grid.Row>
+          <Grid.Column width={16} textAlign={"right"}>
+            <Button
+              primary
+              icon={"add"}
+              // size={"small"}
+              onClick={() => {
+                props.history.push(
+                  `./${props.storeId}/categories/${
+                    props.categories[props.activeCategoryTab].Id
+                  }`
+                );
+              }}
+              content={"إضافة منتج"}
+            />
+          </Grid.Column>
+        </Grid.Row> */}
         <Grid.Row>
           <Grid.Column
             computer={4}
@@ -73,6 +90,9 @@ const All_Page = (props) => {
             <Grid>
               <Grid.Row style={{ flex: 1 }}>
                 <Items
+                  activeCategoryTab={props.activeCategoryTab}
+                  storeId={props.storeId}
+                  categories={props.categories}
                   selectedItem={props.selectedItem}
                   handleItemClick={handleItemClick}
                   items={props.categories[props.activeCategoryTab]?.items}

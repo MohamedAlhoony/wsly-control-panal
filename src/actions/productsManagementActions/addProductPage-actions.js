@@ -24,7 +24,7 @@ export const isLoading = (isLoading) => {
   };
 };
 
-const sendFormData = ({ formData, categoryId }) => {
+const sendFormData = ({ formData, categoryId, storeId }) => {
   return new Promise(async (resolve, reject) => {
     var myHeaders = new Headers();
     myHeaders.append("Authorization", `Bearer ${auth.userData.access_token}`);
@@ -42,7 +42,10 @@ const sendFormData = ({ formData, categoryId }) => {
     };
 
     try {
-      const response = await fetch(`${baseURI}/store/item`, requestOptions);
+      const response = await fetch(
+        `${baseURI}/store/item?StoreID=${storeId}`,
+        requestOptions
+      );
       const body = JSON.parse(await response.text());
       if (response.status >= 200 && response.status < 300) {
         resolve(body);
@@ -55,12 +58,12 @@ const sendFormData = ({ formData, categoryId }) => {
   });
 };
 
-export const submitForm = ({ categoryId }) => {
+export const submitForm = ({ categoryId, storeId }) => {
   return async (dispatch, getState) => {
     try {
       const formData = getState().addProductPage_reducer.formData;
       dispatch(isLoading(true));
-      await sendFormData({ formData, categoryId });
+      await sendFormData({ formData, categoryId, storeId });
       dispatch(clearFormFields());
       dispatch(
         layoutActions.alertModal({
